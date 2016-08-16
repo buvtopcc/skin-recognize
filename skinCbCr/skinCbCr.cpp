@@ -6,7 +6,7 @@
 
 void skipframe(CvCapture* capture,int n){
 	for(int i=1;i<=n;i++)
-	cvQueryFrame(capture);                                                                              //ÔÚÊÓÆµÖĞÌø¹ıÒ»Ö¡£¬»ñÈ¡ÏÂÒ»Ö¡
+	cvQueryFrame(capture);                                                                              //åœ¨è§†é¢‘ä¸­è·³è¿‡ä¸€å¸§ï¼Œè·å–ä¸‹ä¸€å¸§
 }
 
 void cvSkinSegment(IplImage* img, IplImage* mask){
@@ -15,9 +15,9 @@ void cvSkinSegment(IplImage* img, IplImage* mask){
 	IplImage *imgCr = cvCreateImage(imageSize, IPL_DEPTH_8U, 1);
 	IplImage *imgCb = cvCreateImage(imageSize, IPL_DEPTH_8U, 1);
 	IplImage *imgYCrCb = cvCreateImage(imageSize, img->depth, img->nChannels);
-	cvCvtColor(img,imgYCrCb,CV_BGR2YCrCb);																//½«BGRÍ¼Æ¬×ª»¯³ÉYCrCb¸ñÊ½Í¼Æ¬
+	cvCvtColor(img,imgYCrCb,CV_BGR2YCrCb);																//å°†BGRå›¾ç‰‡è½¬åŒ–æˆYCrCbæ ¼å¼å›¾ç‰‡
 	
-	/*½«Y¡¢Cr¡¢CbÍ¨µÀ·ÖÀë£¬È»ºóÓÃÈı¸öÖ¸Õë·Ö±ğ¶ÔÃ¿Ò»¸öÍ¨µÀµÄÏñËØµã¾ÍĞĞ´¦Àí*/
+	/*å°†Yã€Crã€Cbé€šé“åˆ†ç¦»ï¼Œç„¶åç”¨ä¸‰ä¸ªæŒ‡é’ˆåˆ†åˆ«å¯¹æ¯ä¸€ä¸ªé€šé“çš„åƒç´ ç‚¹å°±è¡Œå¤„ç†*/
 	cvSplit(imgYCrCb, imgY, imgCr, imgCb, 0);
 	int y, cr, cb, l, x1, y1, value;
 	unsigned char *pY, *pCr, *pCb, *pMask;
@@ -26,10 +26,10 @@ void cvSkinSegment(IplImage* img, IplImage* mask){
 	pCb = (unsigned char *)imgCb->imageData;
 	pMask = (unsigned char *)mask->imageData;
 	
-	cvSetZero(mask);																					 //½«maskÖ¸ÏòµÄÍ¼Æ¬ÏñËØµãµÄÖµ¶¼ÇåÁã
-	l = img->height * img->width;																		 //¼ÆËã×ÜµÄÏñËØµãÊı£¬ÓÃÀ´È·¶¨ÏÂÃæµÄÑ­»·¼ÆËã
+	cvSetZero(mask);																					 //å°†maskæŒ‡å‘çš„å›¾ç‰‡åƒç´ ç‚¹çš„å€¼éƒ½æ¸…é›¶
+	l = img->height * img->width;																		 //è®¡ç®—æ€»çš„åƒç´ ç‚¹æ•°ï¼Œç”¨æ¥ç¡®å®šä¸‹é¢çš„å¾ªç¯è®¡ç®—
 	 
-	/*ÔÚCb Cr¿Õ¼äÉÏÕÒµ½Ò»¸ö¿ÉÒÔÄâºÏ³£¹æ·ôÉ«·Ö²¼µÄÍÖÔ²ĞÎ£¬È»ºó°ÑÔÚÍÖÔ²ĞÎÇøÓòÄÚµÄÏñËØµã±ê¼ÇÎª·ôÉ«*/
+	/*åœ¨Cb Crç©ºé—´ä¸Šæ‰¾åˆ°ä¸€ä¸ªå¯ä»¥æ‹Ÿåˆå¸¸è§„è‚¤è‰²åˆ†å¸ƒçš„æ¤­åœ†å½¢ï¼Œç„¶åæŠŠåœ¨æ¤­åœ†å½¢åŒºåŸŸå†…çš„åƒç´ ç‚¹æ ‡è®°ä¸ºè‚¤è‰²*/
 	for (int i = 0; i < l; i++){
 		y  = *pY;
 		cr = *pCr;
@@ -41,7 +41,7 @@ void cvSkinSegment(IplImage* img, IplImage* mask){
 		x1 = x1*41/1024;
 		y1 = y1*73/1024;
 		value = x1*x1+y1*y1;
-		if(y<100)	(*pMask)=(value<700) ? 255:0;                                                        //×öãĞÖµÅĞ¶ÏµÄÃüÁî
+		if(y<100)	(*pMask)=(value<700) ? 255:0;                                                        //åšé˜ˆå€¼åˆ¤æ–­çš„å‘½ä»¤
 		else		(*pMask)=(value<850)? 255:0;
 		pY++;
 		pCr++;
@@ -55,46 +55,46 @@ void cvSkinSegment(IplImage* img, IplImage* mask){
 }
 int main()
 {
-	/*Ã¿´ÎÔËĞĞ³ÌĞò¶¼½«ÈÕÖ¾ÎÄ¼şÇå¿Õ£¬·½±ã¿´´Ë´ÎµÃµ½µÄÊı¾İ*/
+	/*æ¯æ¬¡è¿è¡Œç¨‹åºéƒ½å°†æ—¥å¿—æ–‡ä»¶æ¸…ç©ºï¼Œæ–¹ä¾¿çœ‹æ­¤æ¬¡å¾—åˆ°çš„æ•°æ®*/
 	FILE *fp;
 	fp=fopen("d:\\gesturebook.log","w");
 	fclose(fp);    
 
-	/*ÁíÍâÒ»ÖÖÊµÏÖÇå¿ÕµÄ·½·¨
+	/*å¦å¤–ä¸€ç§å®ç°æ¸…ç©ºçš„æ–¹æ³•
 	remove("d:\\gesturebook.log");  
 	*/
 
-	//ÉùÃ÷µ÷ÓÃÏµÍ³Ê±¼äµÄ±äÁ¿
+	//å£°æ˜è°ƒç”¨ç³»ç»Ÿæ—¶é—´çš„å˜é‡
 	time_t timer;
 	struct tm *ptrtime;
 
-	cvNamedWindow( "origin",CV_WINDOW_AUTOSIZE);     //´´½¨Ãû×ÖÎªORIGIN´°¿Ú
+	cvNamedWindow( "origin",CV_WINDOW_AUTOSIZE);     //åˆ›å»ºåå­—ä¸ºORIGINçª—å£
 	CvCapture* capture;                  
-	capture = cvCreateCameraCapture(0);              //´ÓÉãÏñÍ·¶ÁÈ¡ÊÓÆµ
+	capture = cvCreateCameraCapture(0);              //ä»æ‘„åƒå¤´è¯»å–è§†é¢‘
 	IplImage* frame;                      
-	skipframe(capture,3);                            //Õâ¸ö±È½ÏÖØÒª£¬ÒòÎª´Ë´¦²»¼ÓÏÂÃæÅĞ¶ÏµÚÒ»Ö¡µÃµ½·µ»ØÖµ×ÜÊÇÎª¿Õµ¼ÖÂ³ÌĞòÔÚ½ÓÏÂÀ´µÄbreak½áÊø¡£²ÂÏë¿ÉÄÜÊÇÒòÎª¾ßÌåµÄÉãÏñÍ·»ñÈ¡ÓĞ¹Ø£¬ÒòÎªÓĞĞ©µçÄÔÖ±½ÓÓÃº¯ÊıcvQueryFrameµÃµ½µÄµÚÒ»Ö¡¾ÍÊÇ·Ç¿ÕµÄ£¬ÄÇÃ´´Ë´¦¾Í¿ÉÒÔ²»¼Ó
-	while(1) {                                       //ÓÃÒ»¸öÒ»Ö±ÎªÕæµÄÌõ¼şÊ¹Ö®Ò»Ö±ÄÜ´ÓÉãÏñÍ·¶ÁÈ¡Ö¡£¬Ö±µ½ÊÖ¶¯²úÉúÒ»¸öescµÄ¶¯×÷Ê¹Ö®Ìø³öÑ­»·
+	skipframe(capture,3);                            //è¿™ä¸ªæ¯”è¾ƒé‡è¦ï¼Œå› ä¸ºæ­¤å¤„ä¸åŠ ä¸‹é¢åˆ¤æ–­ç¬¬ä¸€å¸§å¾—åˆ°è¿”å›å€¼æ€»æ˜¯ä¸ºç©ºå¯¼è‡´ç¨‹åºåœ¨æ¥ä¸‹æ¥çš„breakç»“æŸã€‚çŒœæƒ³å¯èƒ½æ˜¯å› ä¸ºå…·ä½“çš„æ‘„åƒå¤´è·å–æœ‰å…³ï¼Œå› ä¸ºæœ‰äº›ç”µè„‘ç›´æ¥ç”¨å‡½æ•°cvQueryFrameå¾—åˆ°çš„ç¬¬ä¸€å¸§å°±æ˜¯éç©ºçš„ï¼Œé‚£ä¹ˆæ­¤å¤„å°±å¯ä»¥ä¸åŠ 
+	while(1) {                                       //ç”¨ä¸€ä¸ªä¸€ç›´ä¸ºçœŸçš„æ¡ä»¶ä½¿ä¹‹ä¸€ç›´èƒ½ä»æ‘„åƒå¤´è¯»å–å¸§ï¼Œç›´åˆ°æ‰‹åŠ¨äº§ç”Ÿä¸€ä¸ªescçš„åŠ¨ä½œä½¿ä¹‹è·³å‡ºå¾ªç¯
 		frame = cvQueryFrame( capture );
 		if( !frame ) break;              
-		//cvShowImage( "origin", frame );	                                       //½öÓÃÀ´²âÊÔÓÃ
+		//cvShowImage( "origin", frame );	                                       //ä»…ç”¨æ¥æµ‹è¯•ç”¨
 		IplImage* dstcrcb=cvCreateImage(cvGetSize(frame),8,1);
-		cvSkinSegment(frame,dstcrcb);                                              //µ÷ÓÃ·ôÉ«¼ì²âº¯Êı´¦Àí»ñµÃµÄÖ¡Í¼Æ¬
-		cvDilate(dstcrcb,dstcrcb,NULL,1);                                          //½øĞĞÅòÕÍ´¦Àí£¬·Å´óÏñËØµãµÄÖµ 
-		cvSmooth(dstcrcb,dstcrcb,CV_GAUSSIAN,3,3,0,0);//3x3                        //½øĞĞ¸ßË¹Æ½»¬´¦Àí
+		cvSkinSegment(frame,dstcrcb);                                              //è°ƒç”¨è‚¤è‰²æ£€æµ‹å‡½æ•°å¤„ç†è·å¾—çš„å¸§å›¾ç‰‡
+		cvDilate(dstcrcb,dstcrcb,NULL,1);                                          //è¿›è¡Œè†¨èƒ€å¤„ç†ï¼Œæ”¾å¤§åƒç´ ç‚¹çš„å€¼ 
+		cvSmooth(dstcrcb,dstcrcb,CV_GAUSSIAN,3,3,0,0);//3x3                        //è¿›è¡Œé«˜æ–¯å¹³æ»‘å¤„ç†
 
-		{   /*ÉèÖÃ¸ĞĞËÈ¤µÄroiÇøÓò*/
+		{   /*è®¾ç½®æ„Ÿå…´è¶£çš„roiåŒºåŸŸ*/
 			int width = 640;
 			int height = 160;
 			cvSetImageROI(frame,cvRect(0,320,width,height));
 
-			/*»­ÂÖÀª*/
+			/*ç”»è½®å»“*/
 			IplImage *dsw = cvCreateImage(cvGetSize(dstcrcb), 8, 1);  
 			IplImage *dst = cvCreateImage(cvGetSize(dstcrcb), 8, 3);  
 			CvMemStorage *storage = cvCreateMemStorage(0);  
 			CvSeq *first_contour = NULL;  
 
-			cvThreshold(dstcrcb, dsw, 130, 255, CV_THRESH_BINARY);                                                                   //¶Ô»Ò¶ÈÍ¼Ïñ½øĞĞãĞÖµ²Ù×÷µÃµ½¶şÖµÍ¼Ïñ
-			cvFindContours(dsw, storage, &first_contour, sizeof(CvContour),CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);                //Ñ°ÕÒÂÖÀª
+			cvThreshold(dstcrcb, dsw, 130, 255, CV_THRESH_BINARY);                                                                   //å¯¹ç°åº¦å›¾åƒè¿›è¡Œé˜ˆå€¼æ“ä½œå¾—åˆ°äºŒå€¼å›¾åƒ
+			cvFindContours(dsw, storage, &first_contour, sizeof(CvContour),CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);                //å¯»æ‰¾è½®å»“
 			cvZero(dst);  
 			int cnt = 0;  
 			for(; first_contour != 0; first_contour = first_contour->h_next)  
@@ -103,34 +103,34 @@ int main()
 				CvScalar color = CV_RGB(255, 255,255);  
 				cvDrawContours(dst, first_contour, color, color, 0, 2, CV_FILLED, cvPoint(0, 0));  
 				CvRect rect = cvBoundingRect(first_contour,0);
-				if(rect.width>100&&rect.width<500)                                                                                  //¶ÔÊ¶±ğµÄ·ôÉ«ÇøÓò´óÖÂµÄÏŞÖÆ£¬·ÀÖ¹ÀàËÆµÄÆ¤·ôµÄ±³¾°¸ÉÈÅµÃµ½²»ÊÇÔ¤ÆÚµÄÂÖÀª                                                                   
+				if(rect.width>100&&rect.width<500)                                                                                  //å¯¹è¯†åˆ«çš„è‚¤è‰²åŒºåŸŸå¤§è‡´çš„é™åˆ¶ï¼Œé˜²æ­¢ç±»ä¼¼çš„çš®è‚¤çš„èƒŒæ™¯å¹²æ‰°å¾—åˆ°ä¸æ˜¯é¢„æœŸçš„è½®å»“                                                                   
 				{
-					cvRectangle(frame, cvPoint(rect.x, rect.y), cvPoint(rect.x + 100, rect.y+130),CV_RGB(255, 255, 255), 1, 8, 0);  //»­¾ØĞÎ¿ò£¬ÆğÊ¼µãÊÇÊ¶±ğµÄÂÖÀªµÄ×óÉÏ½Çµã£¬´óĞ¡Îª100*130£¬Õâ¸öÊı¾İÊÇ¶à´ÎÊÔÑé·¢ÏÖÊ¶±ğÊÖÊÆ½ÏºÃµÄ´óĞ¡
-					if((rect.x-frame->origin)>=0&&(rect.x-frame->origin)<=2)                                                        //¸ù¾İÊ¶±ğµÄÊÖÊÆ¾àÀëÍ¼ÏñµÄ×ó±ß½çµÄ¾àÀëÊÇ·ñ×ã¹»½ü£¬Èç¹ûÂú×ãÔò²úÉúÈÏÎªÊÇÓĞÒ»¸öÏò×ó»¬¶¯¶¯×÷£¬¼´²úÉúÒ»¸öÏàÓ¦µÄpage up¶¯×÷
-					{	 /*µ÷ÓÃtime()º¯Êı»ñÈ¡µ±Ç°Ê±¼ä*/
+					cvRectangle(frame, cvPoint(rect.x, rect.y), cvPoint(rect.x + 100, rect.y+130),CV_RGB(255, 255, 255), 1, 8, 0);  //ç”»çŸ©å½¢æ¡†ï¼Œèµ·å§‹ç‚¹æ˜¯è¯†åˆ«çš„è½®å»“çš„å·¦ä¸Šè§’ç‚¹ï¼Œå¤§å°ä¸º100*130ï¼Œè¿™ä¸ªæ•°æ®æ˜¯å¤šæ¬¡è¯•éªŒå‘ç°è¯†åˆ«æ‰‹åŠ¿è¾ƒå¥½çš„å¤§å°
+					if((rect.x-frame->origin)>=0&&(rect.x-frame->origin)<=2)                                                        //æ ¹æ®è¯†åˆ«çš„æ‰‹åŠ¿è·ç¦»å›¾åƒçš„å·¦è¾¹ç•Œçš„è·ç¦»æ˜¯å¦è¶³å¤Ÿè¿‘ï¼Œå¦‚æœæ»¡è¶³åˆ™äº§ç”Ÿè®¤ä¸ºæ˜¯æœ‰ä¸€ä¸ªå‘å·¦æ»‘åŠ¨åŠ¨ä½œï¼Œå³äº§ç”Ÿä¸€ä¸ªç›¸åº”çš„page upåŠ¨ä½œ
+					{	 /*è°ƒç”¨time()å‡½æ•°è·å–å½“å‰æ—¶é—´*/
 						timer=time(NULL);
-						/*µ÷ÓÃlocaltime()º¯Êı½«»ñµÃµÄÏµÍ³Ê±¼ä×ª»¯ÎªÖ¸Ïòstruct tmµÄÖ¸ÕëÖ¸ÏòµÄ½á¹¹Ìå*/
+						/*è°ƒç”¨localtime()å‡½æ•°å°†è·å¾—çš„ç³»ç»Ÿæ—¶é—´è½¬åŒ–ä¸ºæŒ‡å‘struct tmçš„æŒ‡é’ˆæŒ‡å‘çš„ç»“æ„ä½“*/
 						ptrtime = localtime( &timer ) ;
-						keybd_event(VK_LEFT,0,0,0);                                  //µ÷ÓÃÏµÍ³¼üÊóÊÂ¼ş£¬²úÉúÒ»¸ö°´ÏÂ×ó¼ü£¨¼´page down£©µÄ¶¯×÷
-						if((fp=fopen("d:\\gesturebook.log","a"))==NULL)              //´ò¿ªÎÄ¼ş
+						keybd_event(VK_LEFT,0,0,0);                                  //è°ƒç”¨ç³»ç»Ÿé”®é¼ äº‹ä»¶ï¼Œäº§ç”Ÿä¸€ä¸ªæŒ‰ä¸‹å·¦é”®ï¼ˆå³page downï¼‰çš„åŠ¨ä½œ
+						if((fp=fopen("d:\\gesturebook.log","a"))==NULL)              //æ‰“å¼€æ–‡ä»¶
 						{
 						     printf("can't open the file!\n");
 							 exit(1);
 						}
 						else
-						fprintf(fp,"%s	:Page Down\n\n",asctime( ptrtime));         //½«Ê±¼äÒÔ¼°²Ù×÷Ğ´µ½ÎÄ¼şÖĞ
-    					fclose(fp);                                                 //¹Ø±ÕÎÄ¼ş
-						skipframe(capture,7);                                       //Ìø¹ı¼¸Ö¡ÎªÁË·ÀÖ¹¶ÁÈ¡¶à´Î²Ù×÷
+						fprintf(fp,"%s	:Page Down\n\n",asctime( ptrtime));         //å°†æ—¶é—´ä»¥åŠæ“ä½œå†™åˆ°æ–‡ä»¶ä¸­
+    					fclose(fp);                                                 //å…³é—­æ–‡ä»¶
+						skipframe(capture,7);                                       //è·³è¿‡å‡ å¸§ä¸ºäº†é˜²æ­¢è¯»å–å¤šæ¬¡æ“ä½œ
 					}
 
-					if((frame->origin+frame->width-rect.x-rect.width)>=0&&(frame->origin+frame->width-rect.x-rect.width)<=2)           ////¸ù¾İÊ¶±ğµÄÊÖÊÆ¾àÀëÍ¼ÏñµÄ±ß½çµÄ¾àÀëÊÇ·ñ×ã¹»½ü£¬Èç¹ûÂú×ãÔò²úÉúÈÏÎªÊÇÓĞÒ»¸öÏòÓÒ»¬¶¯¶¯×÷£¬¼´²úÉúÒ»¸öÏàÓ¦µÄpage down¶¯×÷
+					if((frame->origin+frame->width-rect.x-rect.width)>=0&&(frame->origin+frame->width-rect.x-rect.width)<=2)           ////æ ¹æ®è¯†åˆ«çš„æ‰‹åŠ¿è·ç¦»å›¾åƒçš„è¾¹ç•Œçš„è·ç¦»æ˜¯å¦è¶³å¤Ÿè¿‘ï¼Œå¦‚æœæ»¡è¶³åˆ™äº§ç”Ÿè®¤ä¸ºæ˜¯æœ‰ä¸€ä¸ªå‘å³æ»‘åŠ¨åŠ¨ä½œï¼Œå³äº§ç”Ÿä¸€ä¸ªç›¸åº”çš„page downåŠ¨ä½œ
 					{  
-						/*µ÷ÓÃtime()º¯Êı»ñÈ¡µ±Ç°Ê±¼ä*/
+						/*è°ƒç”¨time()å‡½æ•°è·å–å½“å‰æ—¶é—´*/
 						timer=time(NULL);
-						/*µ÷ÓÃlocaltime()º¯Êı½«»ñµÃµÄÏµÍ³Ê±¼ä×ª»¯ÎªÖ¸Ïòstruct tmµÄÖ¸ÕëÖ¸ÏòµÄ½á¹¹Ìå*/
+						/*è°ƒç”¨localtime()å‡½æ•°å°†è·å¾—çš„ç³»ç»Ÿæ—¶é—´è½¬åŒ–ä¸ºæŒ‡å‘struct tmçš„æŒ‡é’ˆæŒ‡å‘çš„ç»“æ„ä½“*/
 						ptrtime = localtime( &timer ) ;
-						keybd_event(VK_RIGHT,0,0,0);                                 //µ÷ÓÃÏµÍ³¼üÊóÊÂ¼ş£¬²úÉúÒ»¸ö°´ÏÂ×ó¼ü£¨¼´page down£©µÄ¶¯×÷
-						if((fp=fopen("d:\\gesturebook.log","a"))==NULL)              //´ò¿ªÎÄ¼ş
+						keybd_event(VK_RIGHT,0,0,0);                                 //è°ƒç”¨ç³»ç»Ÿé”®é¼ äº‹ä»¶ï¼Œäº§ç”Ÿä¸€ä¸ªæŒ‰ä¸‹å·¦é”®ï¼ˆå³page downï¼‰çš„åŠ¨ä½œ
+						if((fp=fopen("d:\\gesturebook.log","a"))==NULL)              //æ‰“å¼€æ–‡ä»¶
 						{
 						     printf("can't open the file!\n");
 							 exit(1);
@@ -142,7 +142,7 @@ int main()
 					}
 				}
 			} 
-			cvResetImageROI(frame);//ÖØÖÃROI
+			cvResetImageROI(frame);//é‡ç½®ROI
 			cvShowImage( "origin", frame );	
 			//cvShowImage("out", dstcrcb);
 			cvReleaseImage(&dst);
@@ -153,7 +153,6 @@ int main()
 		char c = cvWaitKey(5);
 		if( c == 27 ) break;
 		cvReleaseImage(&dstcrcb);
-
 	}
 	cvReleaseCapture( &capture );
 	cvDestroyWindow( "origin" );
